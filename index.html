@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Kredit BYD HAKA AUTO</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for better typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0; /* smaller padding */
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .detail-item {
+             font-size: 0.8rem;
+        }
+         .detail-item span:first-child {
+            color: #4b5563; /* gray-600 */
+         }
+        /* Style for hidden elements */
+        .hidden-section {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+
+<div class="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+    <h2 class="text-3xl font-bold text-gray-800 text-center mb-2">Simulasi Kredit BYD HAKA AUTO</h2>
+    <p id="subtitle" class="text-center text-gray-500 mb-6 text-sm">Skema Paket Kredit</p>
+
+
+    <form id="simulasiForm" class="space-y-4">
+        <div>
+            <label for="modelKendaraan" class="block mb-1 text-sm font-medium text-gray-600">Pilih Model Kendaraan</label>
+            <select id="modelKendaraan" name="modelKendaraan" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                <option value="990000000">Denza D9 - Rp 990.000.000</option>
+                <option value="765000000">New Seal Facelift Performance - Rp 765.000.000</option>
+                <option value="654000000">New Seal Facelift Premium - Rp 654.000.000</option>
+                <option value="734000000">Sealion 7 Performance - Rp 734.000.000</option>
+                <option value="644000000">Sealion 7 Premium - Rp 644.000.000</option>
+                <option value="250000000">Byd Atto 1 Premium - Rp 250.000.000</option>
+                <option value="209000000">Byd Atto 1 Dynamic - Rp 209.000.000</option>
+                <option value="535000000">Atto 3 Superior - Rp 535.000.000</option>
+                <option value="405000000">Atto 3 Advanced Std - Rp 405.000.000</option>
+                <option value="448000000">M6 Superior Capt Seat - Rp 448.000.000</option>
+                <option value="438000000">M6 Superior - Rp 438.000.000</option>
+                <option value="398000000">M6 Standart - Rp 398.000.000</option>
+                <option value="444000000">Dolphin Premium - Rp 444.000.000</option>
+                <option value="384000000">Dolphin Dinamic - Rp 384.000.000</option>
+            </select>
+        </div>
+
+
+        <!-- Manual DP Toggle -->
+        <div class="flex items-center">
+            <input id="useManualDp" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+            <label for="useManualDp" class="ml-2 block text-sm text-gray-900">Gunakan DP Manual</label>
+        </div>
+
+
+        <!-- Manual Calculation Section (Initially Hidden) -->
+        <div id="manualInputSection" class="hidden-section space-y-4">
+             <div>
+                <label for="manualDpPercentage" class="block mb-1 text-sm font-medium text-gray-600">Persentase DP Manual (%)</label>
+                <input type="text" id="manualDpPercentage" name="manualDpPercentage" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Minimal 20">
+            </div>
+            <div>
+                 <label for="manualDpAmount" class="block mb-1 text-sm font-medium text-gray-600">Jumlah DP Manual (Rp)</label>
+                 <input type="number" id="manualDpAmount" name="manualDpAmount" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" placeholder="Otomatis terisi">
+                 <p id="dpWarning" class="text-red-600 text-xs mt-1 h-4"></p>
+            </div>
+             <!-- REVISI: Input Suku Bunga Dihilangkan -->
+        </div>
+
+
+        <!-- Package Calculation Section (Initially Visible) -->
+        <div id="packageInputSection" class="space-y-4">
+            <div>
+                <label class="block mb-2 text-sm font-medium text-gray-600">Skema Pembayaran</label>
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center">
+                        <input id="skemaAddb" name="skemaPembayaran" type="radio" value="ADDB" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" checked>
+                        <label for="skemaAddb" class="ml-2 block text-sm text-gray-900">ADDB</label>
+                    </div>
+                    <div class="flex items-center">
+                        <input id="skemaAddm" name="skemaPembayaran" type="radio" value="ADDM" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                        <label for="skemaAddm" class="ml-2 block text-sm text-gray-900">ADDM</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div>
+            <label for="tenorBulan" class="block mb-1 text-sm font-medium text-gray-600">Pilih Tenor</label>
+            <select id="tenorBulan" name="tenorBulan" class="w-full px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                <option value="11">11 Bulan</option>
+                <option value="23">23 Bulan</option>
+                <option value="35" selected>35 Bulan</option>
+                <option value="47">47 Bulan</option>
+                <option value="59">59 Bulan</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="w-full mt-4 bg-blue-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300">
+            Hitung Simulasi
+        </button>
+    </form>
+
+
+    <div id="hasil_simulasi" class="mt-6 pt-6 border-t border-gray-200">
+        <!-- Hasil akan ditampilkan di sini -->
+    </div>
+</div>
+
+
+<div class="text-center text-xs text-gray-500 mt-6 pb-6">
+    <p class="font-semibold">BYD HAKA KAREBOSI</p>
+    <p>Jl. Ahmad Yani No.15, Pattunuang, Kec. Wajo, Kota Makassar, Sulawesi Selatan 90174</p>
+</div>
+
+
+
+
+<script>
+    // --- DATA ---
+    const creditPackages = {
+        "398000000": { "11":{tdp:126540000,angsuran:27024000}, "23":{tdp:128760000,angsuran:13924000}, "35":{tdp:130980000,angsuran:9631000}, "47":{tdp:133700000,angsuran:7696000}, "59":{tdp:140180000,angsuran:6617000} },
+        "438000000": { "11":{tdp:132440000,angsuran:32376000}, "23":{tdp:135160000,angsuran:15378000}, "35":{tdp:137430000,angsuran:10599000}, "47":{tdp:141960000,angsuran:8471000}, "59":{tdp:150950000,angsuran:7282000} },
+        "448000000": { "11":{tdp:135460000,angsuran:30419000}, "23":{tdp:138180000,angsuran:16106000}, "35":{tdp:140430000,angsuran:10841000}, "47":{tdp:147010000,angsuran:8666000}, "59":{tdp:154260000,angsuran:7448000} },
+        "384000000": { "11":{tdp:122300000,angsuran:26073000}, "23":{tdp:124510000,angsuran:13435000}, "35":{tdp:123990000,angsuran:9292000}, "47":{tdp:129310000,angsuran:7427000}, "59":{tdp:135850000,angsuran:6386000} },
+        "444000000": { "11":{tdp:137270000,angsuran:30147000}, "23":{tdp:135170000,angsuran:15589000}, "35":{tdp:139360000,angsuran:10741000}, "47":{tdp:145260000,angsuran:8586000}, "59":{tdp:152640000,angsuran:7380000} },
+        "405000000": { "11":{tdp:126910000,angsuran:27496000}, "23":{tdp:122910000,angsuran:14220000}, "35":{tdp:127100000,angsuran:9760000}, "47":{tdp:133030000,angsuran:7833000}, "59":{tdp:139030000,angsuran:6734000} },
+        "535000000": { "11":{tdp:154030000,angsuran:38825000}, "23":{tdp:157120000,angsuran:18784000}, "35":{tdp:160300000,angsuran:12946000}, "47":{tdp:167650000,angsuran:10347000}, "59":{tdp:176850000,angsuran:8896000} },
+        "990000000": { "11":{tdp:297810000,angsuran:67220000}, "23":{tdp:298640000,angsuran:34187000}, "35":{tdp:290000000,angsuran:23966000}, "47":{tdp:299190000,angsuran:19147000}, "59":{tdp:311950000,angsuran:16458000} },
+        "654000000": { "11":{tdp:199360000,angsuran:44408000}, "23":{tdp:190730000,angsuran:22962000}, "35":{tdp:198720000,angsuran:15826000}, "47":{tdp:203250000,angsuran:12648000}, "59":{tdp:214850000,angsuran:10873000} },
+        "765000000": { "11":{tdp:232700000,angsuran:51943000}, "23":{tdp:222080000,angsuran:26856000}, "35":{tdp:226750000,angsuran:18511000}, "47":{tdp:234850000,angsuran:14786000}, "59":{tdp:243750000,angsuran:12719000} },
+        "644000000": { "11":{tdp:196400000,angsuran:43727000}, "23":{tdp:187910000,angsuran:22611000}, "35":{tdp:191190000,angsuran:15590000}, "47":{tdp:200580000,angsuran:12456000}, "59":{tdp:211210000,angsuran:10711000} },
+        "734000000": { "11":{tdp:223250000,angsuran:49839000}, "23":{tdp:214330000,angsuran:25770000}, "35":{tdp:217120000,angsuran:17757000}, "47":{tdp:224620000,angsuran:14196000}, "59":{tdp:234080000,angsuran:12203000} },
+        "209000000": { "11":{tdp:69720000,angsuran:15110000}, "23":{tdp:69590000,angsuran:7338000}, "35":{tdp:73550000,angsuran:5058000}, "47":{tdp:77530000,angsuran:4043000}, "59":{tdp:82460000,angsuran:3475000} },
+        "250000000": { "11":{tdp:81720000,angsuran:16975000}, "23":{tdp:81770000,angsuran:8782000}, "35":{tdp:84670000,angsuran:6050000}, "47":{tdp:88500000,angsuran:4836000}, "59":{tdp:95500000,angsuran:4157000} }
+    };
+    
+    // --- ELEMENTS ---
+    const simulasiForm = document.getElementById('simulasiForm');
+    const useManualDpCheckbox = document.getElementById('useManualDp');
+    const manualInputSection = document.getElementById('manualInputSection');
+    const packageInputSection = document.getElementById('packageInputSection');
+    const subtitle = document.getElementById('subtitle');
+    const manualDpAmountInput = document.getElementById('manualDpAmount');
+    const manualDpPercentageInput = document.getElementById('manualDpPercentage');
+    const dpWarning = document.getElementById('dpWarning');
+
+
+    let isSyncing = false;
+
+
+    // --- UTILS ---
+    const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    });
+
+
+    // --- FUNCTIONS ---
+    function getInsuranceRate() {
+        // REVISI: Menggunakan rate premi asuransi 2.7% per tahun (rata-rata dari 2.6-2.8%)
+        return 0.027;
+    }
+
+
+    function updateTenorOptions() {
+        const isManual = useManualDpCheckbox.checked;
+        const selectedSkema = document.querySelector('input[name="skemaPembayaran"]:checked').value;
+        const tenorSelect = document.getElementById('tenorBulan');
+        const options = tenorSelect.options;
+
+
+        for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+            const baseTenor = parseInt(option.value, 10);
+            
+            // REVISI: Jika mode manual, atau jika mode paket dengan skema ADDB, tampilkan tenor +1
+            if (isManual || selectedSkema === 'ADDB') {
+                option.textContent = `${baseTenor + 1} Bulan`;
+            } else {
+                option.textContent = `${baseTenor} Bulan`;
+            }
+        }
+    }
+
+
+    function toggleCalculationMode() {
+        if (useManualDpCheckbox.checked) {
+            manualInputSection.style.display = 'block';
+            packageInputSection.style.display = 'none';
+            subtitle.textContent = "Mode Perhitungan Manual";
+        } else {
+            manualInputSection.style.display = 'none';
+            packageInputSection.style.display = 'block';
+            subtitle.textContent = "Skema Paket Kredit";
+        }
+        updateTenorOptions();
+        document.getElementById('hasil_simulasi').innerHTML = ''; // Clear results on mode switch
+    }
+
+
+    function hitungSimulasi() {
+        const isManualMode = useManualDpCheckbox.checked;
+        const hasilDiv = document.getElementById('hasil_simulasi');
+        const hargaOtr = parseFloat(document.getElementById('modelKendaraan').value);
+        
+        let angsuran, footerNote, resultHtml;
+
+
+        if (isManualMode) {
+            const dpSetorString = manualDpAmountInput.value;
+            
+            const dpSetor = parseFloat(dpSetorString) || 0;
+            // REVISI: Suku bunga ditetapkan 10% dan inputnya dihilangkan
+            const sukuBungaTahunan = 10;
+            const tenorBulan = parseInt(document.getElementById('tenorBulan').value, 10);
+
+
+            const minDp = hargaOtr * 0.20;
+            if (dpSetor < minDp) {
+                dpWarning.textContent = `DP minimal adalah ${formatter.format(minDp)}`;
+                hasilDiv.innerHTML = '';
+                return;
+            } else {
+                dpWarning.textContent = '';
+            }
+
+
+            const pokokPinjamanAwal = hargaOtr - dpSetor;
+            const tenorTahun = (tenorBulan + 1) / 12; // Gunakan tenor ADDB untuk kalkulasi asuransi
+
+
+            // Hitung biaya tambahan yang akan dibiayai (difinance)
+            const premiAsuransi = hargaOtr * getInsuranceRate() * tenorTahun;
+            const biayaProvisi = pokokPinjamanAwal * 0.01; // 1% dari pokok pinjaman awal
+            const biayaAdmin = 1250000; 
+
+
+            const totalPokokPinjaman = pokokPinjamanAwal + premiAsuransi + biayaProvisi + biayaAdmin;
+
+
+            const totalBunga = totalPokokPinjaman * (sukuBungaTahunan / 100) * (tenorBulan / 12); // Bunga tetap pakai tenor angsuran
+            const totalPinjamanAkhir = totalPokokPinjaman + totalBunga;
+            angsuran = totalPinjamanAkhir / tenorBulan;
+
+
+            footerNote = `*DP Setor adalah total pembayaran pertama. Perhitungan adalah estimasi.`;
+            resultHtml = `
+                <div class="result-item">
+                    <span class="font-semibold text-gray-800">Total DP Setor</span>
+                    <span class="text-2xl font-bold text-green-600">${formatter.format(dpSetor)}</span>
+                </div>
+            `;
+        } else {
+            const selectedTenor = document.getElementById('tenorBulan').value;
+            const selectedSkema = document.querySelector('input[name="skemaPembayaran"]:checked').value;
+
+
+            const selectedPackage = creditPackages[hargaOtr]?.[selectedTenor];
+            if (!selectedPackage) {
+                hasilDiv.innerHTML = `<p class="text-center text-red-500">Tenor tidak tersedia untuk model ini.</p>`;
+                return;
+            }
+
+
+            const tdp_addb = selectedPackage.tdp;
+            angsuran = selectedPackage.angsuran;
+            
+            let displayedTdp, tdpLabel;
+            if (selectedSkema === 'ADDM') {
+                displayedTdp = tdp_addb + angsuran;
+                tdpLabel = 'Total DP (ADDM)';
+                footerNote = `*Total DP sudah termasuk angsuran pertama. Perhitungan adalah estimasi.`;
+            } else { // ADDB
+                displayedTdp = tdp_addb;
+                tdpLabel = 'Total DP (ADDB)';
+                footerNote = `*Angsuran dibayar mulai bulan berikutnya. Perhitungan adalah estimasi.`;
+            }
+            
+            resultHtml = `
+                <div class="result-item">
+                    <span class="font-semibold text-gray-800">${tdpLabel}</span>
+                    <span class="text-2xl font-bold text-green-600">${formatter.format(displayedTdp)}</span>
+                </div>
+            `;
+        }
+        
+        hasilDiv.innerHTML = `
+            <div class="bg-gray-50 rounded-lg p-6">
+                ${resultHtml}
+                <div class="result-item">
+                    <span class="font-semibold text-gray-800">Angsuran per Bulan</span>
+                    <span class="text-2xl font-bold text-blue-600">${formatter.format(angsuran)}</span>
+                </div>
+            </div>
+            <p class="text-xs text-center text-gray-500 mt-4">${footerNote}</p>
+        `;
+    }
+
+
+    // --- EVENT LISTENERS ---
+    simulasiForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        hitungSimulasi();
+    });
+    
+    document.querySelectorAll('input[name="skemaPembayaran"], #modelKendaraan, #tenorBulan').forEach(input => {
+        input.addEventListener('change', updateTenorOptions);
+    });
+    
+    // Sinkronisasi input Persentase dan Jumlah DP
+    manualDpPercentageInput.addEventListener('input', () => {
+        if (isSyncing) return;
+        isSyncing = true;
+        const percentageValue = manualDpPercentageInput.value.replace(',', '.');
+        const percentage = parseFloat(percentageValue) || 0;
+        const hargaOtr = parseFloat(document.getElementById('modelKendaraan').value);
+        if (hargaOtr > 0) {
+            const amount = (hargaOtr * percentage) / 100;
+            manualDpAmountInput.value = Math.round(amount);
+        } else {
+            manualDpAmountInput.value = '';
+        }
+        isSyncing = false;
+    });
+
+
+    manualDpAmountInput.addEventListener('input', () => {
+        if (isSyncing) return;
+        isSyncing = true;
+        const amountValue = manualDpAmountInput.value;
+        const amount = parseFloat(amountValue) || 0;
+        const hargaOtr = parseFloat(document.getElementById('modelKendaraan').value);
+        if (hargaOtr > 0) {
+            const percentage = (amount / hargaOtr) * 100;
+            // Tampilkan dengan 2 desimal, ganti titik dengan koma untuk display
+            manualDpPercentageInput.value = percentage.toFixed(2).replace('.',',');
+        } else {
+            manualDpPercentageInput.value = '';
+        }
+        isSyncing = false;
+    });
+    
+    useManualDpCheckbox.addEventListener('change', toggleCalculationMode);
+    
+    // Panggil toggleCalculationMode saat halaman dimuat untuk setup awal
+    window.addEventListener('load', () => {
+        toggleCalculationMode();
+    });
+</script>
+
+
+</body>
+</html>
+
+
+
+
+
